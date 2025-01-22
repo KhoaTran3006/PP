@@ -11,14 +11,20 @@ public class PlayerCam : MonoBehaviour
     private float sensY;
 
     public Transform orientation;
+    public Rigidbody rb;
 
     float xRotation;
     float yRotation;
+
+    public Animator anim;
+    public GameObject player;
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        rb = player.GetComponent<Rigidbody>(); 
     }
 
     // Update is called once per frame
@@ -33,5 +39,14 @@ public class PlayerCam : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
+        if (rb.velocity.magnitude > 0)
+        {
+            anim.SetBool("isMoving", true);
+        }
+        else
+        {
+            anim.SetBool("isMoving", false);
+        }
     }
 }

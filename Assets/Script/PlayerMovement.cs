@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintSpeed;
     [SerializeField]
     private float groundDrag;
+    [SerializeField]
+    private float walkSpeed;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -55,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            moveSpeed = 7f;
+            moveSpeed = walkSpeed;
         }
     }
 
