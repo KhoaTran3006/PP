@@ -12,6 +12,8 @@ public class PickupObject : MonoBehaviour
     public float smoothTime;
     [SerializeField]
     private float throwForce;
+    [SerializeField]
+    private float rayDistance;
     
     // Start is called before the first frame update
     void Start()
@@ -49,7 +51,7 @@ public class PickupObject : MonoBehaviour
             Ray ray = cam.ScreenPointToRay(new Vector3(x,y));
             RaycastHit hit;
             
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, rayDistance))
             {
                 Pickable p = hit.collider.GetComponent<Pickable>();
                 if (p != null)
