@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PickupObject : MonoBehaviour
 {
-    public GameObject mainCamera;
+    //public GameObject mainCamera;
     bool carrying;
     public GameObject carriedObject;
     public Camera cam;
     public GameObject carryPos;
+    public float smoothTime;
+    [SerializeField]
+    private float throwForce;
+    
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera");
+        //mainCamera = GameObject.FindWithTag("MainCamera");
         cam = GetComponent<Camera>();
     }
 
@@ -22,6 +26,8 @@ public class PickupObject : MonoBehaviour
         if (carrying)
         {
             Carrying(carriedObject);
+            checkDrop();
+            ThrowObject();
         }
         else
         {
@@ -30,8 +36,8 @@ public class PickupObject : MonoBehaviour
     }
     void Carrying(GameObject o)
     {
-        o.GetComponent<Rigidbody>().isKinematic = true;
-        o.transform.position = carryPos.transform.position;
+        //o.GetComponent<Rigidbody>().isKinematic = true;
+        o.transform.position = Vector3.Lerp (o.transform.position, carryPos.transform.position, Time.deltaTime * smoothTime);
     }
     void Pickup()
     {
@@ -50,8 +56,34 @@ public class PickupObject : MonoBehaviour
                 {
                     carrying = true;
                     carriedObject = p.gameObject;
+                    p.GetComponent<Rigidbody>().isKinematic = true;
                 }
             }
+        }
+    }
+    void checkDrop()
+    {
+        if (Input.GetMouseButtonDown (1))
+        {
+            DropObject();
+        }
+    }
+
+    void DropObject()
+    {
+        carrying = false;
+        carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        carriedObject = null;
+    }
+
+    void ThrowObject()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            carrying = false;
+            carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            carriedObject.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            carriedObject = null;
         }
     }
 }
