@@ -12,6 +12,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float walkSpeed;
 
+    [Header("Crounching")]
+    [SerializeField]
+    private float crounchSpeed;
+    [SerializeField]
+    private float crounchYScale;
+    private float startYScale;
+
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
@@ -30,12 +37,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        startYScale = transform.localScale.y;
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
         MovePlayer();
+
     }
 
     void Update()
@@ -65,6 +74,18 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crounchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            moveSpeed = crounchSpeed;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftControl)) 
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
+
     }
 
     private void MovePlayer()

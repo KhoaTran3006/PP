@@ -573,6 +573,8 @@ MonoBehaviour:
   sprintSpeed: 10
   groundDrag: 5
   walkSpeed: 5
+  crounchSpeed: 0
+  crounchYScale: 0.64
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
@@ -1225,7 +1227,7 @@ Transform:
   m_GameObject: {fileID: 522691702}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6, y: 0.623, z: 2.84}
+  m_LocalPosition: {x: 2.6, y: 0.623, z: 2.996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1663,7 +1665,7 @@ Transform:
   m_GameObject: {fileID: 582956981}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6, y: 0.623, z: 0}
+  m_LocalPosition: {x: 2.6, y: 0.623, z: 0.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3165,7 +3167,7 @@ Transform:
   m_GameObject: {fileID: 1335094240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6, y: 0.623, z: -1.9}
+  m_LocalPosition: {x: 2.6, y: 0.623, z: -0.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
