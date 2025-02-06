@@ -44,7 +44,7 @@ namespace PaintingBoard
             }
             if (_paintCount == _info.PaintColorsNeeded.Count) //reach maximum paint
             {
-                if (_info.PaintColorsNeeded.Count == 0)
+                if (_colorPools.Count == 0)
                 {
                     OnSuceess?.Invoke();
                 }
