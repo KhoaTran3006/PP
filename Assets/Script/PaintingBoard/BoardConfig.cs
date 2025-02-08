@@ -15,6 +15,7 @@ namespace PaintingBoard
         {
             public string Name;
             public List<PaintColor> PaintColorsNeeded;
+            public GameObject Prefab;
         }
 
         public enum PaintColor

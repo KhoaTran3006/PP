@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea023883a756324581373fd623069c8, type: 3}
   m_Name: BoardConfig
   m_EditorClassIdentifier: 
+  Boards:
+  - Name: Test1
+    PaintColorsNeeded: 0000000001000000
+  - Name: Test2
+    PaintColorsNeeded: 030000000100000002000000

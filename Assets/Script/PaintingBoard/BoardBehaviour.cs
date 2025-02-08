@@ -7,11 +7,13 @@ namespace PaintingBoard
     public class BoardBehaviour : MonoBehaviour
     {
         private BoardConfig.BoardInfo _info;
+        public BoardConfig.BoardInfo Info => _info;
+
         private List<BoardConfig.PaintColor> _colorPools;
         private int _paintCount;
 
-        public event Action OnSuceess;
-        public event Action OnFail;
+        public event Action<BoardBehaviour> OnSuceess;
+        public event Action<BoardBehaviour> OnFail;
 
         private enum CheckState
         { 
@@ -46,12 +48,12 @@ namespace PaintingBoard
             {
                 if (_colorPools.Count == 0)
                 {
-                    OnSuceess?.Invoke();
+                    OnSuceess?.Invoke(this);
                 }
                 else
                 {
                     clearState();
-                    OnFail?.Invoke();
+                    OnFail?.Invoke(this);
                 }
             }
         }
