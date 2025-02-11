@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CanvasColorChecker : MonoBehaviour
 {
@@ -13,10 +14,30 @@ public class CanvasColorChecker : MonoBehaviour
 
     public List<ColorCombination> possibleCombinations;
     public Transform spawnPoint;
+    public Text taskUIText;
+    public Font customFont;
 
     [SerializeField]
     private List<Color> collectedColors = new List<Color>();
     private List<ThrowableColor> collectedColorObjects = new List<ThrowableColor>();
+    private ColorCombination currentTask;
+
+    void Start()
+    {
+        SelectNewTask();
+        if (customFont != null)
+        {
+            taskUIText.font = customFont;
+        }
+    }
+
+    private void SelectNewTask()
+    {
+        currentTask = possibleCombinations[Random.Range(0, possibleCombinations.Count)];   
+
+        string colorNames = string.Join(",",  currentTask.requiredColors);
+        taskUIText.text = "Find and throw: " + colorNames;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -126,7 +147,8 @@ public class CanvasColorChecker : MonoBehaviour
 
         if (!success)
         {
-            //Debug.Log("Combination failed, Returning colors");
+            Debug.Log("Combination failed, Returning colors");
+            
         }
     }
 
@@ -140,11 +162,7 @@ public class CanvasColorChecker : MonoBehaviour
 
 
     // Start is called before the first frame update
-    //void Start()
-    //{
-    //    
-    //}
-    //
+    
     //// Update is called once per frame
     //void Update()
     //{
