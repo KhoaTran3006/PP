@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,9 @@ public class CanvasColorChecker : MonoBehaviour
     public Transform spawnPoint;
     public Text taskUIText;
     public Font customFont;
+    public int maxTasks = 10;
+    private int completedTasks = 0;
+    //public GameObject gameCompleteUI;
 
     [SerializeField]
     private List<Color> collectedColors = new List<Color>();
@@ -33,10 +37,12 @@ public class CanvasColorChecker : MonoBehaviour
 
     private void SelectNewTask()
     {
-        currentTask = possibleCombinations[Random.Range(0, possibleCombinations.Count)];   
-
+        currentTask = possibleCombinations[Random.Range(0, possibleCombinations.Count)];
         string colorNames = string.Join(",",  currentTask.requiredColors);
-        taskUIText.text = "Find and throw: " + colorNames;
+        //taskUIText.text = "Find and throw: " + colorNames;
+        colorNames = string.Join(", ", currentTask.requiredColors.Select(c => $"#{ColorUtility.ToHtmlStringRGB(c)}"));
+        Debug.Log($"New Task: Find and throw {colorNames}");
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,57 +66,72 @@ public class CanvasColorChecker : MonoBehaviour
 
     private void CheckCombination()
     {
-        foreach (var combination in possibleCombinations)
+        if (currentTask == null) return;
+
+        Debug.Log($"Checking Combination... Expected {currentTask.requiredColors.Count} colors, Collected {collectedColors.Count}");
+
+        if (IsMatchingCombination(currentTask.requiredColors))
         {
-            if (IsMatchingCombination(combination.requiredColors))
+            Instantiate(currentTask.picturePrefab, spawnPoint.position, Quaternion.identity);
+            Debug.Log("Colors Matched! Picture should spawn");
+            ResetColors(true);
+            //return;
+            completedTasks++;
+
+            if (completedTasks >= maxTasks)
             {
-                Instantiate(combination.picturePrefab, spawnPoint.position, Quaternion.identity);
-                Debug.Log("Colors Matched! Picture should spawn");
-                ResetColors(true);
-                return;
+                Debug.Log("Win");
+            }
+            else
+            {
+                SelectNewTask(); // pick a new task after sucess
             }
         }
-
-        if (collectedColors.Count >= 3)
+        else if (collectedColors.Count >= currentTask.requiredColors.Count)
         {
+            Debug.Log("Incorect combination");
             ResetColors(false);
         }
+        
     }
 
     private bool IsMatchingCombination(List<Color> requiredColors)
     {
         Debug.Log("Comparing Collected Colors with Required Colors...");
-        if (collectedColorObjects.Count != requiredColors.Count)
+        if (collectedColors.Count != requiredColors.Count)
         {
             Debug.Log("Mismatch in color count. Expected: " + requiredColors.Count + ", Got: " + collectedColors.Count);
             return false;
         }
 
+
         List<Color> tempCollected = new List<Color>(collectedColors);
-        
-        foreach (var requiredColor in requiredColors)
+
+        foreach (var requiredColor in requiredColors) 
         {
-            bool matchFound = false;
+          bool matchFound = false;
+      
+          for (int i = 0; i < tempCollected.Count; i++)
+          {
+              if (AreColorsEqual(requiredColor, tempCollected[i]))
+              {
+                  tempCollected.RemoveAt(i); //remove matched color to prevent duplicates
+                  matchFound = true;
+                  break;
+              }
+              
+          }
+      
+          if (!matchFound)
+          {
+              Debug.Log("Missing Color: " + requiredColor);
+              return false;
+      
+          }
+          
+      }
 
-            for (int i = 0; i < tempCollected.Count; i++)
-            {
-                if (AreColorsEqual(requiredColor, tempCollected[i]))
-                {
-                    tempCollected.RemoveAt(i); //remove matched color to prevent duplicates
-                    matchFound = true;
-                    break;
-                }
-                
-            }
-
-            if (!matchFound)
-            {
-                Debug.Log("Missing Color: " + requiredColor);
-                return false;
-
-            }
-            
-        }
+       
         Debug.Log("Colors Matched!");
         return true;
     }
@@ -161,22 +182,5 @@ public class CanvasColorChecker : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
-    
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    
-    //if (success)
-    //{
-    //    colorObject.ResetPosition();
-    //    colorObject.gameObject.SetActive(true);
-    //}
-    //
-    //else
-    //{
-    //    colorObject.ResetPosition();
-    //    colorObject.gameObject.SetActive(true);
-    //}
-    //}
+   
 }
