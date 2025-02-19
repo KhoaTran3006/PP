@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Boards:
   - Name: Test1
-    PaintColorsNeeded: 0000000001000000
+    PaintColorsNeeded: 0200000001000000
+    Prefab: {fileID: 7369293643396524389, guid: d0a46bb42458741aab06ad23bf05b7dc, type: 3}
   - Name: Test2
     PaintColorsNeeded: 030000000100000002000000
+    Prefab: {fileID: 0}
