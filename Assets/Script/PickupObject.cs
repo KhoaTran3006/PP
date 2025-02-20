@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PaintingBoard;
 
 public class PickupObject : MonoBehaviour
 {
     //public GameObject mainCamera;
     bool carrying;
-    public GameObject carriedObject;
+    public IPickable carriedObject;
+
     public Camera cam;
     public GameObject carryPos;
     public float smoothTime;
@@ -27,7 +29,7 @@ public class PickupObject : MonoBehaviour
     {
         if (carrying)
         {
-            Carrying(carriedObject);
+            Carrying(carriedObject.GameObject);
             checkDrop();
             ThrowObject();
         }
@@ -53,12 +55,12 @@ public class PickupObject : MonoBehaviour
             
             if (Physics.Raycast(ray, out hit, rayDistance))
             {
-                Pickable p = hit.collider.GetComponent<Pickable>();
+                IPickable p = hit.collider.GetComponent<IPickable>();
                 if (p != null)
                 {
                     carrying = true;
-                    carriedObject = p.gameObject;
-                    p.GetComponent<Rigidbody>().isKinematic = true;
+                    carriedObject = p;
+                    p.Pickup();
                 }
             }
         }
@@ -74,7 +76,7 @@ public class PickupObject : MonoBehaviour
     void DropObject()
     {
         carrying = false;
-        carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        carriedObject.Drop();
         carriedObject = null;
     }
 
@@ -83,8 +85,8 @@ public class PickupObject : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             carrying = false;
-            carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            carriedObject.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            carriedObject.GameObject.GetComponent<Rigidbody>().isKinematic = false;
+            carriedObject.GameObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwForce, ForceMode.Impulse);
             carriedObject = null;
         }
     }

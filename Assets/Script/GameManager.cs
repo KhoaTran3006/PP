@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using P = PaintingBoard;
 
@@ -14,6 +15,15 @@ namespace Assets.Script
         [SerializeField] P.BoardConfig _config;
 
         private List<P.BoardConfig.BoardInfo> _currentBoard;
+
+        private void Awake()
+        {
+            _painterDict = new Dictionary<P.BoardConfig.PaintColor, P.Painter>();
+            foreach (var color in _painterList)
+            {
+                _painterDict[color.Color] = color;
+            }
+        }
 
         private void Start()
         {
@@ -45,10 +55,18 @@ namespace Assets.Script
 
         private void resetPainter(P.BoardBehaviour board)
         {
-            var colors = board.Info.PaintColorsNeeded;
-            foreach (var color in colors)
+            StartCoroutine(cor());
+
+            //use coroutine because somehow the last painter cannot reset in the same frame lead to weird bug
+            IEnumerator cor()
             {
-                _painterDict[color].ResetPainter();
+                yield return new WaitForEndOfFrame();
+                var colors = board.ColorStoredList;
+                foreach (var color in colors)
+                {
+                    _painterDict[color].ResetPainter();
+                }
+                board.ResetCheckState();
             }
         }
 

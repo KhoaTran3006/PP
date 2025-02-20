@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 namespace PaintingBoard
 {
     public interface IPainting
     {
         BoardConfig.PaintColor Color { get; }
+        GameObject GameObject { get; }
+        bool Usable { get; }
+        void UsePaint();
+    }
+
+    public interface IPickable
+    {
+        GameObject GameObject { get; }
+
+        void Pickup();
+        void Drop();
     }
 }
