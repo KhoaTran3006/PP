@@ -18,4 +18,4 @@ MonoBehaviour:
     Prefab: {fileID: 7369293643396524389, guid: d0a46bb42458741aab06ad23bf05b7dc, type: 3}
   - Name: Test2
     PaintColorsNeeded: 030000000100000002000000
-    Prefab: {fileID: 0}
+    Prefab: {fileID: 8249517838159351246, guid: 7bc3e3924ab1741058fcb7884b390295, type: 3}
